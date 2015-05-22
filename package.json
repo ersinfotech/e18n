@@ -1,6 +1,6 @@
 {
   "name": "e18n",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "i18n solution for ersinfotech",
   "main": "index.js",
   "scripts": {

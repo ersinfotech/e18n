@@ -27,10 +27,11 @@ after server started, you can goto `/e18n` for web translation page
 
 ## client configuration
 
-`note`: 
+**note**: 
 
 ```javascript
-resGetPath: 'locales/resources.json?lng=__lng__&ns=__ns__' // always should be set to this
+resGetPath: 'locales/resources.json?lng=__lng__&ns=__ns__'
+// always should be set to this
 
 ```
 

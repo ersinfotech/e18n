@@ -1,13 +1,23 @@
 # e18n
 e18n for ers
 
-## usage
+## description
+
+automatic use locales diretory in root dir. if not exits e18n will generate a startkit for you!
+
+## install
 
 ```
+  npm install --save e18n
+```
+
+## usage
+
+```javascript
 var app = express();
 
 var e18n = require('e18n');
 
-app.use('/e18n', e18n(path: __dirname + '/locales'));
+e18n.use(app);
 
 ```

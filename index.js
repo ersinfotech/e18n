@@ -17,6 +17,65 @@ var defaultWTOptions = {
   dynamicLoad: true
 };
 
+var indexHTML = [
+  '<!doctype html>',
+  '<html lang="en">',
+  '<head>',
+    '<meta charset="utf-8">',
+    '<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">',
+    '<meta name="viewport" content="width=device-width,initial-scale=1">',
+
+    '<title>i18next - webtranslate</title>',
+
+    '<!-- Application root. -->',
+    '<base href="/">',
+
+    '<!-- Application styles. -->',
+    '<link rel="stylesheet" href="__path__/css/i18nextWT.css">',
+  '</head>',
+
+  '<body>',
+    '<div class="header">',
+      '<div class="header-inner"></div>',
+    '</div>',
+
+    '<div class="main">',
+      '<div class="main-inner"></div>',
+    '</div>',
+
+    '<div class="footer">',
+      '<div class="footer-inner"></div>',
+    '</div>',
+
+    '<!-- Application source. -->',
+    '<script src="__path__/js/i18nextWT.js"></script>',
+    '<script language="javascipt" type="text/javascript">',
+      'i18nextWT_onready = function(wt) {',
+
+        '__loadResources__',
+
+        'wt.config(',
+          'JSON.parse(\'__i18nextWTOptions__\')',
+        ')',
+
+        'wt.start();',
+      '};',
+    '</script>',
+  '</body>',
+  '</html>'
+].join('\n')
+
+function renderIndex (req, res, option) {
+  var i18nextWTOptions = getWTOption();
+  option.i18nextWTOptions = JSON.stringify(i18nextWTOptions);
+
+  var html = indexHTML;
+  html = html.replace('__i18nextWTOptions__', option.i18nextWTOptions);
+  html = html.replace('__loadResources__', option.i18nextWTResources);
+  html = html.replace(/__path__/g, option.i18nextWTPath);
+  res.send(html);
+}
+
 function getLngAndNS (locales) {
   if (!fs.existsSync(locales)) fse.copySync(join(__dirname, '/locales'), locales);
   var languages = fs.readdirSync(locales);
@@ -43,23 +102,27 @@ function getOptionByPath (path) {
   return option;
 }
 
+function getWTOption () {
+  var p = join(process.cwd(), '/locales');
+  return getOptionByPath(p);
+}
+
 exports.use = function(route, app) {
   switch (arguments.length) {
     case 1: {
-      option = route;
+      app = route;
       route = '/e18n';
-      exports.use(route, option);
+      exports.use(route, app);
       break;
     }
     case 2: {
-      var p = join(process.cwd(), '/locales');
       if (!app) throw Error('function(route, app) {}, app is missing');
-
-      var i18nextWTOptions = getOptionByPath(p);
+      var i18nextWTOptions = getWTOption();
 
       exports.enable(app, {
         path: route,
-        i18nextWTOptions: i18nextWTOptions
+        i18nextWTOptions: i18nextWTOptions,
+        index: renderIndex
 
       });
     }

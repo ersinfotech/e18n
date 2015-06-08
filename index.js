@@ -76,8 +76,16 @@ function renderIndex (req, res, option) {
   res.send(html);
 }
 
+function generateLocales (locales) {
+  var lngs = ['cn', 'dev', 'en', 'tw'];
+  lngs.forEach(function(lng) {
+    fse.mkdirsSync(join(locales, lng));
+  });
+
+}
+
 function getLngAndNS (locales) {
-  if (!fs.existsSync(locales)) fse.copySync(join(__dirname, '/locales'), locales);
+  if (!fs.existsSync(locales)) generateLocales(locales);
   var languages = fs.readdirSync(locales);
   var namespaces = languages.map(function(d) { return fs.readdirSync(join(locales, d)); });
 

@@ -78,7 +78,7 @@ function renderIndex(req, res, option) {
 function generateLocales(locales) {
   var lngs = ['cn', 'dev', 'en', 'tw']
   lngs.forEach(function (lng) {
-    fs.mkdirsSync(join(locales, lng), { recursive: true })
+    fs.mkdirSync(join(locales, lng), { recursive: true })
   })
 }
 

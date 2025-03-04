@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/ersinfotech/e18n",
   "dependencies": {
-    "fs-extra": "^0.18.3",
     "i18next": "^1.9.0",
     "underscore": "^1.8.3"
   }
